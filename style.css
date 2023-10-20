@@ -1,0 +1,38 @@
+html {
+    font-size: 62.5%;
+    box-sizing: border-box;
+} 
+*, *:before, *:after {    
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+    text-decoration: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+} 
+
+body { background-color: #343434; }
+.section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10rem;
+    gap: 8rem;
+}
+.image {
+    width: 20.5rem;
+    height: 20.5rem;
+}
+.buttons {
+    display: flex;
+    gap: 3.4rem;
+}
+.button {
+    width: 18.4rem;
+    height: 3rem;
+    border-radius: 7px;
+    border: 1px solid #F1F1F1;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.17);
+    color: #000;
+    font-family: Inter;
+    font-size: 1.3rem;
+}
