@@ -6,13 +6,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const downloadButton = document.getElementById("button_download");
     const doneButton = document.querySelector("#button__done");
 
-    dropArea.addEventListener("dragover", function(e) {
-        e.preventDefault();
-    });
-
-    dropArea.addEventListener("drop", function(e) {
-        e.preventDefault();
-        const file = e.dataTransfer.files[0];
+    // Función para cargar una imagen desde un input de archivo
+    function handleImageUpload(file) {
         if (file && file.type.startsWith("image/")) {
             const reader = new FileReader();
             reader.onload = function(event) {
@@ -24,28 +19,28 @@ document.addEventListener("DOMContentLoaded", function() {
                     canvas.height = img.height;
                     const ctx = canvas.getContext("2d");
 
-                    // Draw the image on the canvas
+                    // Dibuja la imagen en el lienzo
                     ctx.drawImage(img, 0, 0);
 
-                    // Get the pixels of the image
+                    // Obtén los píxeles de la imagen
                     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                     const pixels = imageData.data;
 
-                    // Iterate through the pixels and set non-transparent ones to white
+                    // Recorre los píxeles y establece los no transparentes a blanco
                     for (let i = 0; i < pixels.length; i += 4) {
                         if (pixels[i + 3] > 0) {
-                            pixels[i] = 255; // red component
-                            pixels[i + 1] = 255; // green component
-                            pixels[i + 2] = 255; // blue component
+                            pixels[i] = 255; // componente roja
+                            pixels[i + 1] = 255; // componente verde
+                            pixels[i + 2] = 255; // componente azul
                         }
                     }
 
-                    // Set the modified image in the img element
+                    // Establece la imagen modificada en el elemento img
                     ctx.putImageData(imageData, 0, 0);
                     image.src = canvas.toDataURL("image/png");
                     image.classList.add("image--active");
 
-                    // Toggle the class on the buttons
+                    // Alternar la clase en los botones
                     buttons.forEach(button => {
                         if (button === uploadButton) {
                             button.classList.remove("button--active");
@@ -54,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         }
                     });
 
-                    // Add the click event to download the image
+                    // Agregar el evento de clic para descargar la imagen
                     downloadButton.addEventListener("click", function() {
                         const downloadLink = document.createElement("a");
                         downloadLink.href = canvas.toDataURL("image/png");
@@ -62,15 +57,27 @@ document.addEventListener("DOMContentLoaded", function() {
                         downloadLink.click();
                     });
 
-                    // Add the click event to reset the application
+                    // Agregar el evento de clic para reiniciar la aplicación
                     doneButton.addEventListener("click", function() {
-                        location.reload(); // Reload the page
+                        location.reload(); // Recarga la página
                     });
                 };
             };
             reader.readAsDataURL(file);
         } else {
-            alert("Please drag a valid image.");
+            alert("Por favor, selecciona un archivo de imagen válido.");
         }
+    }
+
+    // Agregar evento de clic para el botón de carga
+    uploadButton.addEventListener("click", function() {
+        const fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.accept = "image/png"; // Solo permite archivos PNG
+        fileInput.addEventListener("change", function() {
+            const file = fileInput.files[0];
+            handleImageUpload(file);
+        });
+        fileInput.click();
     });
 });
